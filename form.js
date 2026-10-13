@@ -133,7 +133,7 @@
         questions: config.questions.concat({
           id: "next", question: text("next_question"), type: "choice",
           options: next.map(function (v) { return text("next_option_" + v); }),
-          values: next, preset: "default",
+          values: next, preset: "now",
         }),
       };
     },
