@@ -12,12 +12,20 @@
 <!-- All wording comes from the Copy tab of the sheet, as on the sign-up page. -->
 <p id="offline" hidden>Couldn't load this page. Check your internet and reload.</p>
 <main id="page" hidden>
-  <h1 class="probe-title" data-copy="site_heading"></h1>
+  <!-- The same mark as the toolbar icon: two rounded bars on a circle. -->
+  <h1 class="probe-title probe-brand">
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <circle cx="50" cy="50" r="50" fill="currentColor"/>
+      <rect x="26.75" y="26" width="17" height="48" rx="8.5" fill="var(--probe-bg)"/>
+      <rect x="56.25" y="26" width="17" height="48" rx="8.5" fill="var(--probe-bg)"/>
+    </svg>
+    <span data-copy="site_heading"></span>
+  </h1>
   <p class="probe-lead" data-copy="site_intro"></p>
 
   <h2 data-copy="site_extension_heading"></h2>
-  <p><a class="probe-submit" href="pause-extension.zip" download data-copy="site_download"></a></p>
   <ol data-list="site_extension_"></ol>
+  <p><a class="probe-submit" href="pause-extension.zip" download data-copy="site_download"></a></p>
 
   <h2 data-copy="site_helper_heading"></h2>
   <p data-copy="site_helper_text"></p>
