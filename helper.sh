@@ -1,6 +1,6 @@
 #!/bin/bash
 # Pause app helper (Mac).
-# Every 3 seconds it looks at which app is in front. While that is Claude,
+# Every 2 seconds it looks at which app is in front. While that is Claude,
 # ChatGPT or VS Code, and they are typing in it, it tells the sheet so (at
 # most once a minute per app) and opens the form tab when the sheet says a
 # form is due. Reading or scrolling does not count. Outside a discussion the
@@ -37,7 +37,7 @@ last_tool=""    # the last use told to the sheet
 last_sent=0
 
 while true; do
-  sleep 3
+  sleep 2
   tool="$(tool_in_front)"
   now="$(date +%s)"
   if [ "$tool" != "$front_tool" ]; then front_tool="$tool"; front_since="$now"; fi

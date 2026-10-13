@@ -1,5 +1,5 @@
 # Pause app helper (Windows).
-# Every 3 seconds it looks at which app is in front. While that is Claude,
+# Every 2 seconds it looks at which app is in front. While that is Claude,
 # ChatGPT or VS Code, and the laptop is being used, it tells the sheet so (at
 # most once a minute per app) and opens the form tab when the sheet says a
 # form is due. Outside a discussion the sheet records nothing.
@@ -30,11 +30,49 @@ public class PauseWindow {
 }
 "@
 
+# Bringing Chrome to the front once the form tab is open. Windows resists a
+# background program doing this (the taskbar icon flashes instead), so it is
+# done in two steps: borrow the front window's right to switch, and if that is
+# not enough, signal an Alt key being let go, which Windows reads as the user
+# asking for a switch. The key is never pressed, so no app acts on it.
+# Kept apart from the code above so that a fault here cannot stop the helper.
+try {
+  Add-Type @"
+using System;
+using System.Runtime.InteropServices;
+public class PauseFocus {
+  [DllImport("user32.dll")] static extern IntPtr GetForegroundWindow();
+  [DllImport("user32.dll")] static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint processId);
+  [DllImport("user32.dll")] static extern bool AttachThreadInput(uint thread, uint toThread, bool attach);
+  [DllImport("user32.dll")] static extern bool BringWindowToTop(IntPtr hWnd);
+  [DllImport("user32.dll")] static extern bool SetForegroundWindow(IntPtr hWnd);
+  [DllImport("user32.dll")] static extern bool ShowWindow(IntPtr hWnd, int show);
+  [DllImport("user32.dll")] static extern bool IsIconic(IntPtr hWnd);
+  [DllImport("user32.dll")] static extern void keybd_event(byte key, byte scan, uint flags, UIntPtr extra);
+  [DllImport("kernel32.dll")] static extern uint GetCurrentThreadId();
+  public static void BringForward(IntPtr window) {
+    if (IsIconic(window)) ShowWindow(window, 9);  // it was minimised: restore it
+    uint processId;
+    uint front = GetWindowThreadProcessId(GetForegroundWindow(), out processId);
+    uint here = GetCurrentThreadId();
+    AttachThreadInput(here, front, true);
+    BringWindowToTop(window);
+    SetForegroundWindow(window);
+    AttachThreadInput(here, front, false);
+    if (GetForegroundWindow() != window) {
+      keybd_event(0x12, 0, 2, UIntPtr.Zero);  // Alt, let go only
+      SetForegroundWindow(window);
+    }
+  }
+}
+"@
+} catch {}
+
 $lastTool = ""
 $lastSent = 0
 
 while ($true) {
-  Start-Sleep -Seconds 3
+  Start-Sleep -Seconds 2
   [uint32]$processId = 0
   [void][PauseWindow]::GetWindowThreadProcessId([PauseWindow]::GetForegroundWindow(), [ref]$processId)
   $name = ""
@@ -57,5 +95,12 @@ while ($true) {
     $page = "${site}/form.html?tool=$([uri]::EscapeDataString($tool))&source=app-win"
     try { Start-Process "chrome.exe" -ArgumentList "`"$page`"" -ErrorAction Stop }
     catch { Start-Process $page }
+    # Give Chrome a moment to open the tab, then bring its window to the front.
+    try {
+      Start-Sleep -Milliseconds 1200
+      $chrome = Get-Process chrome -ErrorAction SilentlyContinue |
+        Where-Object { $_.MainWindowHandle -ne 0 } | Select-Object -First 1
+      if ($chrome) { [PauseFocus]::BringForward($chrome.MainWindowHandle) }
+    } catch {}
   }
 }
