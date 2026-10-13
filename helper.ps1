@@ -35,7 +35,7 @@ $lastSent = 0
 
 while ($true) {
   Start-Sleep -Seconds 3
-  $processId = 0
+  [uint32]$processId = 0
   [void][PauseWindow]::GetWindowThreadProcessId([PauseWindow]::GetForegroundWindow(), [ref]$processId)
   $name = ""
   try { $name = (Get-Process -Id $processId -ErrorAction Stop).ProcessName.ToLower() } catch {}

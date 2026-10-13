@@ -1,5 +1,6 @@
 # Installs the Pause app helper on Windows. CODE is the one on your sign-up page.
-#   $env:PAUSE_CODE='CODE'; irm https://travistanguanri.github.io/pause/install.ps1 | iex
+# The sign-up page gives the full line to paste into PowerShell; it sets
+# $env:PAUSE_CODE and then runs this file straight from the website.
 
 $code = ("$env:PAUSE_CODE" -replace "[^A-Za-z]", "").ToUpper()
 if ($code.Length -ne 4) {
@@ -24,7 +25,9 @@ $shortcut.Arguments = $run
 $shortcut.WindowStyle = 7
 $shortcut.Save()
 
-& (Join-Path $dir "uninstall.ps1") -StopOnly
+# Stop a helper that is already running. Windows will not run a script file
+# unless it is told this one is allowed, hence -ExecutionPolicy Bypass.
+& powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $dir "uninstall.ps1") -StopOnly
 Start-Process "powershell.exe" -ArgumentList $run -WindowStyle Hidden
 
 Write-Host "Done. The Pause app helper is running for code $code."
