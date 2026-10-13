@@ -1,0 +1,251 @@
+/* One stylesheet for everything Pause shows: the floating form window, the
+   sign-up page, the popup, and the website (home, form tab, report).
+
+   Typography follows Apple's text styles, one role per job:
+     Figure     120 bold     the one big number on the report
+     Large Title 34 bold     page headings
+     Title 1     28 bold     the greeting on the form window
+     Title 2     22 bold     section headings, the popup greeting
+     Headline    17 semibold each question
+     Body        17 regular  reading text and typed answers
+     Callout     16 regular  option buttons
+     Subheadline 15 regular  the lines that say who presses what in the popup
+     Footnote    13 regular  hints and status lines, in the secondary colour
+   Change the variables below to recolour it. */
+
+.probe-backdrop, .probe-page {
+  --probe-bg: #ffffff;
+  --probe-label: #1d1d1f;      /* main text */
+  --probe-secondary: #6e6e73;  /* supporting text, hints */
+  --probe-separator: #d2d2d7;  /* field outlines */
+  --probe-fill: #f5f5f7;       /* resting option buttons */
+  --probe-fill-hover: #e8e8ed;
+  /* Black, white and greys only. The accent is the near-black used for the
+     Send button, selected options and the switch when on. */
+  --probe-accent: #1d1d1f;
+  --probe-accent-text: #ffffff;
+  --probe-focus: rgba(0, 0, 0, 0.2); /* soft ring around the focused control */
+  --probe-radius: 20px;
+  /* Elevation: a hairline edge, a close soft shadow and a wide ambient one. */
+  --probe-elevation: 0 0 0 0.5px rgba(0, 0, 0, 0.12), 0 8px 24px rgba(0, 0, 0, 0.12),
+                     0 32px 80px rgba(0, 0, 0, 0.28);
+  font: 17px/1.47 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+  color: var(--probe-label);
+  color-scheme: light; /* always light, whatever the laptop's setting */
+  -webkit-font-smoothing: antialiased;
+}
+.probe-backdrop ::selection, .probe-page ::selection { background: rgba(0, 0, 0, 0.14); }
+
+/* A greeting with a name in it: the lead-in steps back, the name carries the weight. */
+.probe-greeting:has(strong) { color: var(--probe-secondary); }
+.probe-greeting strong { color: var(--probe-label); font-weight: inherit; }
+
+/* ---- Floating window on chatbot sites ---------------------------------- */
+
+/* The dimmed, slightly blurred layer keeps the page visible but not clickable
+   until the form is sent. */
+.probe-backdrop {
+  position: fixed; inset: 0; background: rgba(0, 0, 0, 0.3);
+  -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px);
+}
+.probe-window {
+  position: absolute; display: flex; flex-direction: column; box-sizing: border-box;
+  width: min(720px, calc(100vw - 32px)); max-width: 100vw; max-height: 100vh;
+  min-width: 320px; min-height: 220px;
+  resize: both; overflow: hidden; /* drag the bottom-right corner to resize */
+  border-radius: var(--probe-radius); background: var(--probe-bg); box-shadow: var(--probe-elevation);
+}
+/* The greeting doubles as the handle for moving the window. */
+.probe-bar {
+  flex: none; padding: 26px 32px 6px;
+  font-size: 28px; line-height: 1.14; font-weight: 700; letter-spacing: -0.02em; text-wrap: balance;
+  cursor: grab; user-select: none; touch-action: none;
+}
+.probe-bar:active { cursor: grabbing; }
+.probe-window .probe {
+  flex: 1; min-height: 0; max-width: none; overflow-y: auto; padding: 14px 32px 28px;
+  scrollbar-width: thin; scrollbar-color: #c7c7cc transparent;
+}
+.probe-window .probe-submit { display: block; width: auto; min-width: 132px; padding: 13px 30px; }
+
+/* ---- Standalone pages (sign-up, popup, website) ------------------------- */
+
+.probe-page { margin: 0; padding: 56px 20px 72px; background: var(--probe-bg); }
+.probe-page main { max-width: 560px; margin: 0 auto; }
+.probe-page h2 {
+  margin: 44px 0 10px; font-size: 22px; line-height: 1.27; font-weight: 700; letter-spacing: -0.012em;
+  text-wrap: balance;
+}
+.probe-page p { margin: 0 0 12px; }
+.probe-lead { font-size: 19px; line-height: 1.42; color: var(--probe-secondary); }
+.probe-page ul, .probe-page ol { margin: 0; padding-left: 22px; }
+.probe-page li { margin: 6px 0; }
+.probe-page li::marker { color: var(--probe-secondary); }
+/* With no colour to mark a link, the underline does it. */
+.probe-page a {
+  color: inherit; text-decoration: underline; text-underline-offset: 3px;
+  text-decoration-color: var(--probe-separator);
+}
+.probe-page a:hover { color: var(--probe-label); text-decoration-color: currentColor; }
+.probe-page input[type="checkbox"] {
+  width: 18px; height: 18px; margin: 0 8px 0 0; vertical-align: -3px; accent-color: var(--probe-accent);
+}
+.probe-page code {
+  display: block; margin: 8px 0; padding: 12px 14px; border-radius: 10px; background: var(--probe-fill);
+  font: 13px/1.5 ui-monospace, "SF Mono", Menlo, Consolas, monospace; overflow-wrap: anywhere; user-select: all;
+}
+/* A link that is the page's main action is drawn as the action button. */
+.probe-page a.probe-submit {
+  display: inline-block; box-sizing: border-box; width: auto; padding: 13px 30px; color: var(--probe-accent-text);
+  text-align: center; text-decoration: none;
+}
+.probe-page a.probe-submit:hover { color: var(--probe-accent-text); }
+/* A line that introduces a line to paste sits close above it. */
+.probe-page p:has(+ code) { margin: 16px 0 0; }
+
+/* The report: one number carries the page, everything else explains it. */
+.probe-page .probe-figure {
+  margin: 28px 0 0; font-size: 120px; line-height: 1; font-weight: 700; letter-spacing: -0.035em;
+  font-variant-numeric: tabular-nums; /* the count-up must not jitter */
+}
+.probe-page .probe-figure-label {
+  margin: 4px 0 20px; font-size: 22px; line-height: 1.27; font-weight: 700; letter-spacing: -0.012em;
+  text-wrap: balance;
+}
+.probe-page .probe-lead + .probe-lead { margin-top: -8px; }
+.probe-page .probe-lead + .probe-note { margin-top: 44px; }
+
+/* The popup is a page too, just a small one. Its spacing sits on a 4px grid:
+   20 around the edge and between groups, 16 under the greeting and above the
+   last link, 8 between a line and the control it belongs to. */
+.probe-popup { box-sizing: border-box; width: 300px; padding: 20px; }
+.probe-popup .probe-hello {
+  margin: 0 0 16px; font-size: 22px; line-height: 1.27; font-weight: 700; letter-spacing: -0.012em;
+}
+
+/* ---- The form itself ---------------------------------------------------- */
+
+.probe { box-sizing: border-box; width: 100%; max-width: 560px; text-align: left; }
+.probe * { box-sizing: border-box; font: inherit; }
+.probe [hidden] { display: none !important; }
+
+.probe-title {
+  margin: 0 0 14px; font-size: 34px; line-height: 1.12; font-weight: 700; letter-spacing: -0.022em;
+  text-wrap: balance;
+}
+.probe-question { margin-bottom: 24px; }
+.probe-label { margin: 0 0 10px; font-size: 17px; line-height: 1.29; font-weight: 600; }
+
+.probe-options { display: flex; flex-wrap: wrap; gap: 8px; }
+.probe-option {
+  min-height: 40px; padding: 9px 18px; border: 1px solid transparent; border-radius: 999px;
+  background: var(--probe-fill); color: var(--probe-label); font-size: 16px; line-height: 1.3;
+  cursor: pointer; transition: background-color 0.15s ease, color 0.15s ease;
+}
+.probe-option:hover { background: var(--probe-fill-hover); }
+.probe-option[aria-pressed="true"] { background: var(--probe-accent); color: var(--probe-accent-text); }
+.probe-scale .probe-option {
+  width: 44px; height: 44px; min-height: 0; padding: 0; font-variant-numeric: tabular-nums;
+}
+.probe-ends {
+  display: flex; justify-content: space-between; max-width: 252px; margin-top: 6px;
+  font-size: 13px; line-height: 1.38; color: var(--probe-secondary);
+}
+
+.probe-input {
+  display: block; width: 100%; padding: 11px 16px; border: 1px solid var(--probe-separator);
+  border-radius: 12px; background: var(--probe-bg); color: var(--probe-label);
+  font-size: 17px; line-height: 1.4; caret-color: var(--probe-accent); resize: vertical;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.probe-input::placeholder { color: var(--probe-secondary); opacity: 1; }
+/* "Others" as a box in the row of options: click in and type. It keeps the
+   squarer corners of a text field, so it reads as something to type in, not
+   another pill to pick. */
+.probe-options .probe-other {
+  width: 200px; min-height: 40px; padding: 8px 16px; border-color: transparent;
+  background: var(--probe-fill); font-size: 16px; line-height: 1.3;
+}
+.probe-other[data-picked="true"] { border-color: var(--probe-accent); background: var(--probe-bg); }
+
+/* The Send button and, on a form opened for an app, the way out beside it. */
+.probe-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.probe-submit {
+  width: 100%; min-height: 50px; padding: 13px 22px; border: 0; cursor: pointer;
+  border-radius: 12px; /* squarer than the option pills, so an action never reads as a choice */
+  background: var(--probe-accent); color: var(--probe-accent-text);
+  font-size: 17px; line-height: 1.4; font-weight: 600;
+  transition: background-color 0.15s ease, opacity 0.15s ease;
+}
+.probe-submit:hover:not(:disabled) { background: color-mix(in srgb, var(--probe-accent) 86%, white); }
+.probe-submit:disabled { opacity: 0.32; cursor: default; }
+.probe-note {
+  margin: 10px 0 0; font-size: 13px; line-height: 1.38; color: var(--probe-secondary);
+  font-variant-numeric: tabular-nums; /* the countdown must not jitter */
+}
+.probe-note:empty { display: none; }
+
+/* On/off toggle in the switch popup. */
+.probe-toggle {
+  position: relative; display: block; width: 51px; height: 31px; margin: 0; padding: 0; border: 0;
+  border-radius: 999px; background: #e9e9ea; cursor: pointer; transition: background-color 0.2s ease;
+}
+.probe-toggle::after {
+  content: ""; position: absolute; top: 2px; left: 2px; width: 27px; height: 27px;
+  border-radius: 50%; background: #ffffff;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15), 0 3px 1px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s ease;
+}
+.probe-toggle[aria-checked="true"] { background: var(--probe-accent); }
+.probe-toggle[aria-checked="true"]::after { transform: translateX(20px); }
+
+/* ---- Switch popup: start or join a discussion, then its code ------------ */
+
+/* Every gap in the popup is set here, not by the page's paragraph spacing. */
+.probe-popup p { margin: 0; }
+/* Who presses what: one line above each of the two ways in. */
+.probe-popup .probe-step { margin: 20px 0 8px; font-size: 15px; line-height: 1.33; }
+.probe-popup .probe-step:first-child { margin-top: 0; }
+.probe-popup .probe-step:empty { display: none; }
+.probe-join { display: flex; gap: 8px; }
+.probe-submit + .probe-join { margin-top: 8px; } /* no line between them */
+.probe-popup .probe-note { margin-top: 8px; }
+.probe-popup .probe-label { margin-bottom: 12px; }
+.probe-join .probe-input { flex: 1; min-width: 0; }
+.probe-join .probe-submit { flex: none; width: auto; padding: 13px 20px; }
+/* A code is typed and read in capitals, spaced so the letters stay apart. */
+.probe-code { font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; }
+.probe-code::placeholder { font-weight: 400; letter-spacing: normal; text-transform: none; }
+/* A second action beside the main one: same shape, stepped back to grey. */
+.probe-quiet { background: var(--probe-fill); color: var(--probe-label); }
+.probe-quiet:hover:not(:disabled) { background: var(--probe-fill-hover); }
+.probe-quiet:disabled { opacity: 1; color: #aeaeb2; } /* fading the grey would make it vanish */
+
+/* The code gets read out across a table, so it is the biggest thing here. */
+.probe-room {
+  min-height: 38px; margin: 0; font-size: 34px; line-height: 1.12; font-weight: 700;
+  letter-spacing: 0.12em; user-select: all;
+}
+/* The second or two before the sheet hands back a new code. */
+.probe-room.probe-waiting {
+  width: 132px; border-radius: 10px; background: var(--probe-fill);
+  animation: probe-wait 1.2s ease-in-out infinite alternate;
+}
+@keyframes probe-wait { to { background: var(--probe-fill-hover); } }
+@media (prefers-reduced-motion: reduce) { .probe-room.probe-waiting { animation: none; } }
+.probe-popup .probe-room-note { margin-top: 4px; }
+/* Like a row in Settings: what it is doing on the left, the switch on the right. */
+.probe-row {
+  display: flex; align-items: center; gap: 12px; min-height: 31px;
+  margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--probe-separator);
+}
+.probe-popup .probe-row .probe-note { margin: 0; }
+.probe-row .probe-toggle { flex: none; margin-left: auto; }
+.probe-popup .probe-foot { margin-top: 16px; }
+
+/* Keyboard focus: a soft grey ring around the control. */
+.probe-option:focus-visible, .probe-submit:focus-visible, .probe-toggle:focus-visible,
+.probe-input:focus-visible {
+  outline: 2px solid transparent; box-shadow: 0 0 0 4px var(--probe-focus);
+}
+.probe-input:focus-visible { border-color: var(--probe-accent); }
