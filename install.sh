@@ -13,7 +13,12 @@ DIR="$HOME/.pause"
 PLIST="$HOME/Library/LaunchAgents/com.pause.helper.plist"
 
 mkdir -p "$DIR" "$HOME/Library/LaunchAgents"
-curl -fsSL "https://travistanguanri.github.io/pause/helper.sh" -o "$DIR/helper.sh"
+# The helper is saved as "Pause" and run directly, because macOS lists a
+# background item under the name of the file it runs. Run through bash, it
+# would be listed as "bash".
+curl -fsSL "https://travistanguanri.github.io/pause/helper.sh" -o "$DIR/Pause"
+chmod +x "$DIR/Pause"
+rm -f "$DIR/helper.sh"  # where an earlier version kept it
 curl -fsSL "https://travistanguanri.github.io/pause/uninstall.sh" -o "$DIR/uninstall.sh"
 printf '%s' "$CODE" > "$DIR/code.txt"
 
@@ -25,7 +30,7 @@ cat > "$PLIST" <<PLIST_END
 <dict>
   <key>Label</key><string>com.pause.helper</string>
   <key>ProgramArguments</key>
-  <array><string>/bin/bash</string><string>$DIR/helper.sh</string></array>
+  <array><string>$DIR/Pause</string></array>
   <key>RunAtLoad</key><true/>
   <key>KeepAlive</key><true/>
 </dict>
