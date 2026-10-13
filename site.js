@@ -127,15 +127,12 @@
       });
       document.querySelectorAll("[data-tab]").forEach((section) => { section.hidden = Number(section.dataset.tab) !== showing; });
 
-      // Sign up: once they have, the form goes and a greeting heads the tab.
-      // Straight after signing up, the same greeting heads the tab they land on.
+      // Sign up: once they have, the form goes. Straight after signing up, a
+      // greeting heads the tab they land on.
       const code = (me && me.code) || "";
       $("signup").hidden = Boolean(code);
-      $("signed-up").hidden = !code;
       $("welcome").hidden = !welcome;
-      [$("signed-up"), $("welcome")].forEach((heading) => {
-        ProbeForm.fillInto(heading, copy.done_heading, { name: firstName(me && me.name) });
-      });
+      ProbeForm.fillInto($("welcome"), copy.done_heading, { name: firstName(me && me.name) });
       // Set up your apps: the install lines, with this person's code already in them.
       $("mac").textContent = "curl -fsSL " + self.PROBE_SITE + "/install.sh | bash -s -- " + code;
       $("windows").textContent = "$env:PAUSE_CODE='" + code + "'; [Net.ServicePointManager]::SecurityProtocol='Tls12'; "

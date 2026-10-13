@@ -159,11 +159,8 @@
 /* The two ways to finish the apps tab, side by side under the lines to paste. */
 .probe-site section > .probe-actions { margin-top: 32px; }
 .probe-site section > .probe-actions .probe-submit { width: auto; padding: 13px 30px; }
-/* How to uninstall: one quiet line under every tab, which opens on a click. */
-.probe-remove {
-  margin-top: 64px; padding-top: 16px; border-top: 1px solid var(--probe-separator);
-  font-size: 13px; line-height: 1.38;
-}
+/* How to uninstall: one line under every tab, at reading size, which opens on a click. */
+.probe-remove { margin-top: 64px; padding-top: 16px; border-top: 1px solid var(--probe-separator); }
 .probe-remove summary { width: fit-content; border-radius: 4px; cursor: pointer; }
 .probe-remove summary:hover { color: var(--probe-label); }
 .probe-remove[open] summary { margin-bottom: 12px; }

@@ -6,7 +6,7 @@
   <meta name="robots" content="noindex">
   <title>Pause</title>
   <link rel="icon" href="icon32.png">
-  <link rel="stylesheet" href="form.css?v=1791906734">
+  <link rel="stylesheet" href="form.css?v=1791907434">
 </head>
 <body class="probe-page probe-site" data-page="home">
 <!-- The one page for getting set up: four tabs, opened at the first one this
@@ -39,8 +39,6 @@
 
   <!-- 2. Sign up: what they are agreeing to, then the form -->
   <section data-tab="2" hidden>
-    <!-- Once they have signed up, this heads the tab and the form below goes -->
-    <h2 class="probe-title probe-greeting" id="signed-up" hidden></h2>
     <h2 data-copy="signup_heading"></h2>
     <p data-copy="signup_intro"></p>
 
@@ -53,7 +51,7 @@
     <h2 data-copy="control_heading"></h2>
     <ul data-list="control_"></ul>
 
-    <!-- Shown until they have signed up -->
+    <!-- Shown until they have signed up; after that the tab's tick says so -->
     <div id="signup">
       <h2 data-copy="signup_form_heading"></h2>
       <p><label><input type="checkbox" id="agree"> <span data-copy="signup_agree"></span></label></p>
@@ -63,7 +61,7 @@
 
   <!-- 3. Set up your apps: one line to paste, with their own code already in it -->
   <section data-tab="3" hidden>
-    <!-- The same greeting, on the screen they land on straight after signing up -->
+    <!-- The greeting, on the screen they land on straight after signing up -->
     <h2 class="probe-title probe-greeting" id="welcome" hidden></h2>
     <h2 data-copy="helper_heading"></h2>
     <p data-copy="helper_text"></p>
@@ -96,8 +94,8 @@
     <code>powershell -ExecutionPolicy Bypass -File "$env:LOCALAPPDATA\Pause\uninstall.ps1"</code>
   </details>
 </main>
-<script src="config.js?v=1791906734"></script>
-<script src="form.js?v=1791906734"></script>
-<script src="site.js?v=1791906734"></script>
+<script src="config.js?v=1791907434"></script>
+<script src="form.js?v=1791907434"></script>
+<script src="site.js?v=1791907434"></script>
 </body>
 </html>
