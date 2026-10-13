@@ -181,6 +181,15 @@
       });
     },
 
+    // The app helper's install lines for one sign-up: { mac, windows }.
+    helperLines: function (site, code) {
+      return {
+        mac: "curl -fsSL " + site + "/install.sh | bash -s -- " + code,
+        windows: "$env:PAUSE_CODE='" + code + "'; [Net.ServicePointManager]::SecurityProtocol='Tls12'; "
+          + "iex (New-Object Net.WebClient).DownloadString('" + site + "/install.ps1')",
+      };
+    },
+
     // Bullet points: every row named prefix + a number, in the sheet's order.
     list: function (copy, prefix) {
       return Object.keys(copy)

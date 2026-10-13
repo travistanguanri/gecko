@@ -102,6 +102,12 @@
     const reached = () => (!me ? 1 : !me.code ? 2 : !me.apps ? 3 : 4);
     let showing = reached();
     let welcome = false; // they signed up a moment ago, on this page
+    // The browser remembers which sign-up the app helper was last set up for,
+    // and that outlives the extension. A different code now means Pause was
+    // removed and added again, and the helper is still linked to the old one.
+    const LINKED = "pause-helper-code";
+    const linked = () => { try { return localStorage.getItem(LINKED) || ""; } catch (e) { return ""; } };
+    const again = () => Boolean(me && me.code && linked() && linked() !== me.code);
 
     const tabs = ProbeForm.list(copy, "site_tab_").slice(0, 4).map((name, i) => {
       const button = el("button", "probe-tab");
@@ -133,10 +139,14 @@
       $("signup").hidden = Boolean(code);
       $("welcome").hidden = !welcome;
       ProbeForm.fillInto($("welcome"), copy.done_heading, { name: firstName(me && me.name) });
-      // Set up your apps: the install lines, with this person's code already in them.
-      $("mac").textContent = "curl -fsSL " + self.PROBE_SITE + "/install.sh | bash -s -- " + code;
-      $("windows").textContent = "$env:PAUSE_CODE='" + code + "'; [Net.ServicePointManager]::SecurityProtocol='Tls12'; "
-        + "iex (New-Object Net.WebClient).DownloadString('" + self.PROBE_SITE + "/install.ps1')";
+      // Set up your apps: the install lines, with this person's code already in
+      // them. Someone who set the helper up under an earlier sign-up is told to
+      // paste the line again.
+      const lines = ProbeForm.helperLines(self.PROBE_SITE, code);
+      $("mac").textContent = lines.mac;
+      $("windows").textContent = lines.windows;
+      $("apps-heading").textContent = (again() ? copy.helper_again_heading : copy.helper_heading) || "";
+      $("apps-text").textContent = (again() ? copy.helper_again_text : copy.helper_text) || "";
     }
     function show(n) {
       showing = n;
@@ -176,6 +186,7 @@
 
     // Set up your apps is the one tab they finish by saying so, either way.
     const finishApps = (value) => {
+      if (value === "done" && me && me.code) { try { localStorage.setItem(LINKED, me.code); } catch (e) {} }
       ask({ type: "apps", value });
       if (me) me = Object.assign({}, me, { apps: value });
       was = reached();

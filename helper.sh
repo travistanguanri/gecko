@@ -55,7 +55,9 @@ while true; do
     --data-urlencode "action=use" --data-urlencode "code=$CODE" --data-urlencode "tool=$tool" \
     --data-urlencode "source=app-mac" --data-urlencode "t=$now")"
   if [ "$reply" = "yes" ]; then
-    url="$SITE/form.html?tool=${tool// /%20}&source=app-mac"
+    # After the #: which sign-up this helper is linked to. That part of an
+    # address stays in the browser; Pause compares it with its own.
+    url="$SITE/form.html?tool=${tool// /%20}&source=app-mac#helper=$CODE"
     open -a "Google Chrome" "$url" 2>/dev/null || open "$url"
   fi
 done

@@ -92,7 +92,9 @@ while ($true) {
   } catch {}
 
   if ($reply -eq "yes") {
-    $page = "${site}/form.html?tool=$([uri]::EscapeDataString($tool))&source=app-win"
+    # After the #: which sign-up this helper is linked to. That part of an
+    # address stays in the browser; Pause compares it with its own.
+    $page = "${site}/form.html?tool=$([uri]::EscapeDataString($tool))&source=app-win#helper=${code}"
     try { Start-Process "chrome.exe" -ArgumentList "`"$page`"" -ErrorAction Stop }
     catch { Start-Process $page }
     # Give Chrome a moment to open the tab, then bring its window to the front.

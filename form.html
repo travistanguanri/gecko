@@ -6,7 +6,7 @@
   <meta name="robots" content="noindex">
   <title>Pause</title>
   <link rel="icon" href="icon32.png">
-  <link rel="stylesheet" href="form.css?v=1791907434">
+  <link rel="stylesheet" href="form.css?v=1791910107">
 </head>
 <body class="probe-page probe-site" data-page="form">
 <!-- The form tab. The app helper opens it when Claude, ChatGPT or VS Code is
@@ -16,7 +16,24 @@
 <main hidden>
   <h1 class="probe-title" id="title">Pause isn't in this browser</h1>
   <p class="probe-lead" id="note">Open this link in Chrome, where you added Pause.</p>
+
+  <!-- Only when the helper is linked to an older sign-up than the one in this
+       Chrome (Pause was removed and added again): the line that links it to
+       this one, for the laptop the helper is running on. -->
+  <div id="relink" hidden>
+    <div id="relink-mac">
+      <p class="probe-note" id="relink-mac-label"></p>
+      <code id="relink-mac-line"></code>
+    </div>
+    <div id="relink-windows">
+      <p class="probe-note" id="relink-windows-label"></p>
+      <code id="relink-windows-line"></code>
+    </div>
+    <p id="relink-after"></p>
+  </div>
+  <!-- Only when Pause is here but nobody has signed up in it yet -->
+  <p id="unsigned" hidden><a class="probe-submit" id="unsigned-link"></a></p>
 </main>
-<script src="site.js?v=1791907434"></script>
+<script src="site.js?v=1791910107"></script>
 </body>
 </html>
