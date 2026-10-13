@@ -6,10 +6,14 @@
   <meta name="robots" content="noindex">
   <title>Pause</title>
   <link rel="icon" href="icon32.png">
-  <link rel="stylesheet" href="form.css?v=1791899726">
+  <link rel="stylesheet" href="form.css?v=1791906734">
 </head>
 <body class="probe-page probe-site" data-page="home">
-<!-- All wording comes from the Copy tab of the sheet, as on the sign-up page. -->
+<!-- The one page for getting set up: four tabs, opened at the first one this
+     person has not finished. The Pause extension tells the page whether it is
+     in this Chrome and who has signed up (see content.js).
+     All wording comes from the Copy tab of the sheet. data-copy names the row
+     to show; data-list shows every row that starts with that name as a list. -->
 <p id="offline" hidden>Couldn't load this page. Check your internet and reload.</p>
 <main id="page" hidden>
   <!-- The same mark as the toolbar icon: two rounded bars on a circle. -->
@@ -21,17 +25,79 @@
     </svg>
     <span data-copy="site_heading"></span>
   </h1>
-  <p class="probe-lead" data-copy="site_intro"></p>
 
-  <h2 data-copy="site_extension_heading"></h2>
-  <ol data-list="site_extension_"></ol>
-  <p><a class="probe-submit" href="pause-extension.zip" download data-copy="site_download"></a></p>
+  <nav aria-label="Steps"><ol class="probe-tabs" id="tabs"></ol></nav>
 
-  <h2 data-copy="site_helper_heading"></h2>
-  <p data-copy="site_helper_text"></p>
+  <!-- 1. Add extension -->
+  <section data-tab="1" hidden>
+    <p class="probe-lead" data-copy="site_intro"></p>
+    <p data-copy="site_promise"></p>
+    <h2 data-copy="site_extension_heading"></h2>
+    <ol data-list="site_extension_"></ol>
+    <p><a class="probe-submit" href="pause-extension.zip" download data-copy="site_download"></a></p>
+  </section>
+
+  <!-- 2. Sign up: what they are agreeing to, then the form -->
+  <section data-tab="2" hidden>
+    <!-- Once they have signed up, this heads the tab and the form below goes -->
+    <h2 class="probe-title probe-greeting" id="signed-up" hidden></h2>
+    <h2 data-copy="signup_heading"></h2>
+    <p data-copy="signup_intro"></p>
+
+    <h2 data-copy="does_heading"></h2>
+    <ul data-list="does_"></ul>
+
+    <h2 data-copy="does_not_heading"></h2>
+    <ul data-list="does_not_"></ul>
+
+    <h2 data-copy="control_heading"></h2>
+    <ul data-list="control_"></ul>
+
+    <!-- Shown until they have signed up -->
+    <div id="signup">
+      <h2 data-copy="signup_form_heading"></h2>
+      <p><label><input type="checkbox" id="agree"> <span data-copy="signup_agree"></span></label></p>
+      <div id="form"></div>
+    </div>
+  </section>
+
+  <!-- 3. Set up your apps: one line to paste, with their own code already in it -->
+  <section data-tab="3" hidden>
+    <!-- The same greeting, on the screen they land on straight after signing up -->
+    <h2 class="probe-title probe-greeting" id="welcome" hidden></h2>
+    <h2 data-copy="helper_heading"></h2>
+    <p data-copy="helper_text"></p>
+    <p class="probe-note" data-copy="helper_mac"></p>
+    <code id="mac"></code>
+    <p class="probe-note" data-copy="helper_windows"></p>
+    <code id="windows"></code>
+    <div class="probe-actions">
+      <button class="probe-submit" id="apps-done" data-copy="helper_done"></button>
+      <button class="probe-submit probe-quiet" id="apps-skip" data-copy="helper_skip"></button>
+    </div>
+  </section>
+
+  <!-- 4. Start discussing: the page to come back to before a discussion -->
+  <section data-tab="4" hidden>
+    <h2 data-copy="pin_heading"></h2>
+    <p data-copy="pin_text"></p>
+    <h2 data-copy="discuss_heading"></h2>
+    <ol data-list="discuss_"></ol>
+  </section>
+
+  <!-- Under every tab -->
+  <details class="probe-remove">
+    <summary data-copy="uninstall_heading"></summary>
+    <p data-copy="uninstall_extension"></p>
+    <p data-copy="uninstall_helper"></p>
+    <p class="probe-note" data-copy="helper_mac"></p>
+    <code>bash ~/.pause/uninstall.sh</code>
+    <p class="probe-note" data-copy="helper_windows"></p>
+    <code>powershell -ExecutionPolicy Bypass -File "$env:LOCALAPPDATA\Pause\uninstall.ps1"</code>
+  </details>
 </main>
-<script src="config.js?v=1791899726"></script>
-<script src="form.js?v=1791899726"></script>
-<script src="site.js?v=1791899726"></script>
+<script src="config.js?v=1791906734"></script>
+<script src="form.js?v=1791906734"></script>
+<script src="site.js?v=1791906734"></script>
 </body>
 </html>

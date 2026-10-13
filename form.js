@@ -1,6 +1,6 @@
 // Shared form: builds the questions and collects the answers, and fills
 // pages with the sheet's wording. Used by the extension (content.js,
-// onboarding.js, popup.js) and the website (site.js). Styled by form.css.
+// popup.js) and the website (site.js). Styled by form.css.
 (function () {
   function el(tag, props, kids) {
     const node = Object.assign(document.createElement(tag), props || {});

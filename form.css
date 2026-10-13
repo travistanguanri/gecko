@@ -1,5 +1,5 @@
 /* One stylesheet for everything Pause shows: the floating form window, the
-   sign-up page, the popup, and the website (home, form tab, report).
+   popup, and the website (home with its four tabs, form tab, report).
 
    Typography follows Apple's text styles, one role per job:
      Figure     120 bold     the one big number on the report
@@ -10,7 +10,8 @@
      Body        17 regular  reading text and typed answers
      Callout     16 regular  option buttons
      Subheadline 15 regular  the lines that say who presses what in the popup
-     Footnote    13 regular  hints and status lines, in the secondary colour
+     Footnote    13 regular  hints and status lines, in the secondary colour;
+                             also the names of the website's tabs
    Change the variables below to recolour it. */
 
 .probe-backdrop, .probe-page {
@@ -68,7 +69,7 @@
 }
 .probe-window .probe-submit { display: block; width: auto; min-width: 132px; padding: 13px 30px; }
 
-/* ---- Standalone pages (sign-up, popup, website) ------------------------- */
+/* ---- Standalone pages (popup, website) ---------------------------------- */
 
 .probe-page { margin: 0; padding: 56px 20px 72px; background: var(--probe-bg); }
 .probe-page main { max-width: 560px; margin: 0 auto; }
@@ -101,6 +102,7 @@
 }
 .probe-page a.probe-submit:hover { color: var(--probe-accent-text); }
 .probe-page ol + p { margin-top: 32px; } /* the action that follows a list of steps */
+.probe-page button { font-family: inherit; }
 
 /* The website's pages sit in the middle of the window, top to bottom. Only
    headings are black; everything that explains is grey. */
@@ -116,6 +118,55 @@
 .probe-brand svg { flex: none; width: 36px; height: 36px; }
 /* A line that introduces a line to paste sits close above it. */
 .probe-page p:has(+ code) { margin: 16px 0 0; }
+
+/* ---- Website home: four tabs, one per step of getting set up ------------ */
+
+/* The home page hangs from the top, so the heading and the tabs stay where
+   they are while the tab underneath changes height. */
+.probe-site[data-page="home"] { justify-content: flex-start; padding-top: clamp(56px, 11vh, 104px); }
+.probe-page .probe-tabs {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 24px 0 36px; padding: 0;
+  list-style: none;
+}
+.probe-page .probe-tabs li { margin: 0; }
+/* A tab is a bar with its number and name under it. The bar is black as far
+   as they have got; a finished tab swaps its number for a tick. Tabs further
+   on are there to read but cannot be opened yet. */
+.probe-tab {
+  display: flex; flex-wrap: wrap; align-content: flex-start; gap: 0 6px; box-sizing: border-box;
+  width: 100%; min-height: 44px; padding: 10px 0 0; border: 0; border-top: 2px solid var(--probe-separator);
+  border-radius: 0; background: none; font-size: 13px; line-height: 1.38; text-align: left;
+  color: var(--probe-secondary); cursor: pointer; transition: color 0.15s ease;
+}
+.probe-tab[data-reached="true"] { border-top-color: var(--probe-label); }
+.probe-tab:hover:not(:disabled), .probe-tab[aria-current] { color: var(--probe-label); }
+.probe-tab[aria-current] { font-weight: 600; }
+.probe-tab:disabled { cursor: default; }
+.probe-tab-mark { flex: none; min-width: 12px; font-variant-numeric: tabular-nums; }
+.probe-tab-mark svg { display: block; margin-top: 3px; }
+.probe-tab-name { flex: 1; min-width: 0; }
+/* "Optional", under the name of the tab that can be skipped. */
+.probe-tab-note { flex-basis: 100%; padding-left: 18px; font-weight: 400; color: var(--probe-secondary); }
+.probe-tab-note:empty { display: none; }
+/* In a narrow window the number sits above the name, which needs the width. */
+@media (max-width: 480px) {
+  .probe-tab-mark { flex-basis: 100%; }
+  .probe-tab-note { padding-left: 0; }
+}
+.probe-site section > :first-child, .probe-site section > [hidden]:first-child + * { margin-top: 0; }
+/* "You're in, Sam!" at page-heading size: the sign-up went through. */
+.probe-page h2.probe-title { font-size: 34px; line-height: 1.12; letter-spacing: -0.022em; }
+/* The two ways to finish the apps tab, side by side under the lines to paste. */
+.probe-site section > .probe-actions { margin-top: 32px; }
+.probe-site section > .probe-actions .probe-submit { width: auto; padding: 13px 30px; }
+/* How to uninstall: one quiet line under every tab, which opens on a click. */
+.probe-remove {
+  margin-top: 64px; padding-top: 16px; border-top: 1px solid var(--probe-separator);
+  font-size: 13px; line-height: 1.38;
+}
+.probe-remove summary { width: fit-content; border-radius: 4px; cursor: pointer; }
+.probe-remove summary:hover { color: var(--probe-label); }
+.probe-remove[open] summary { margin-bottom: 12px; }
 
 /* The report: one number carries the page, everything else explains it. */
 .probe-page .probe-figure {
@@ -259,7 +310,7 @@
 
 /* Keyboard focus: a soft grey ring around the control. */
 .probe-option:focus-visible, .probe-submit:focus-visible, .probe-toggle:focus-visible,
-.probe-input:focus-visible {
+.probe-input:focus-visible, .probe-tab:focus-visible, .probe-remove summary:focus-visible {
   outline: 2px solid transparent; box-shadow: 0 0 0 4px var(--probe-focus);
 }
 .probe-input:focus-visible { border-color: var(--probe-accent); }
