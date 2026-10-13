@@ -100,10 +100,20 @@
   text-align: center; text-decoration: none;
 }
 .probe-page a.probe-submit:hover { color: var(--probe-accent-text); }
-.probe-page ol + p { margin-top: 20px; } /* the action that follows a list of steps */
-/* The website's heading: the Pause mark, then the name. */
-.probe-brand { display: flex; align-items: center; gap: 10px; }
-.probe-brand svg { flex: none; width: 36px; height: 36px; }
+.probe-page ol + p { margin-top: 32px; } /* the action that follows a list of steps */
+
+/* The website's pages sit in the middle of the window, top to bottom. Only
+   headings are black; everything that explains is grey. */
+.probe-site {
+  box-sizing: border-box; min-height: 100vh; min-height: 100dvh; padding-bottom: 56px; /* same as the top */
+  display: flex; flex-direction: column; justify-content: center;
+}
+.probe-site main { width: 100%; color: var(--probe-secondary); }
+.probe-site h1, .probe-site h2, .probe-site .probe-figure, .probe-site .probe-figure-label { color: var(--probe-label); }
+.probe-site .probe-greeting:has(strong) { color: var(--probe-secondary); } /* a greeting keeps its grey lead-in */
+/* The website's heading: the Pause mark, as tall as the capital P, then the name. */
+.probe-brand { display: flex; align-items: baseline; gap: 10px; }
+.probe-brand svg { flex: none; width: 0.72em; height: 0.72em; width: 1cap; height: 1cap; }
 /* A line that introduces a line to paste sits close above it. */
 .probe-page p:has(+ code) { margin: 16px 0 0; }
 
