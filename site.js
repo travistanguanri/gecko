@@ -76,7 +76,7 @@
 
   if (page === "report") {
     ProbeForm.fillInto($("heading"), copy.report_heading, { name: report.name });
-    $("moments-label").textContent = report.moments === 1 ? copy.report_moment : copy.report_moments;
+    $("moments-unit").textContent = report.moments === 1 ? copy.report_time : copy.report_times;
     $("length").textContent = ProbeForm.fill(copy.report_length, { minutes: report.minutes });
     const tools = new Intl.ListFormat("en-GB", { type: "conjunction" }).format(report.tools);
     $("tools").textContent = ProbeForm.fill(copy.report_tools, { tools });

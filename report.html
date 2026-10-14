@@ -6,7 +6,7 @@
   <meta name="robots" content="noindex">
   <title>Pause</title>
   <link rel="icon" href="icon32.png">
-  <link rel="stylesheet" href="form.css?v=1791958563">
+  <link rel="stylesheet" href="form.css?v=1791959936">
 </head>
 <body class="probe-page probe-site" data-page="report">
 <!-- One person's numbers for one discussion, shown when they switch off.
@@ -14,9 +14,13 @@
 <p id="offline" hidden>Couldn't load your report. Check your internet and reload this page.</p>
 <main id="page" hidden>
   <h1 class="probe-title probe-greeting" id="heading"></h1>
-  <p class="probe-figure" id="moments"></p>
-  <p class="probe-figure-label" id="moments-label"></p>
-  <p class="probe-lead" id="length"></p>
+  <!-- Read as one sentence: "You reached for AI / 2 times across 24 min of
+       discussion / with Claude". The two lines around the number share a style. -->
+  <p class="probe-figure-label" data-copy="report_reached"></p>
+  <div class="probe-tally">
+    <p class="probe-figure"><span id="moments"></span> <span id="moments-unit"></span></p>
+    <p class="probe-figure-label" id="length"></p>
+  </div>
   <p class="probe-lead" id="tools"></p>
 
   <!-- The wrap-up questions (Wrap-up Questions tab), sent straight to the sheet.
@@ -30,8 +34,8 @@
   <p class="probe-note" data-copy="report_thanks"></p>
   <p class="probe-note"><a href="./" data-copy="report_link"></a></p>
 </main>
-<script src="config.js?v=1791958563"></script>
-<script src="form.js?v=1791958563"></script>
-<script src="site.js?v=1791958563"></script>
+<script src="config.js?v=1791959936"></script>
+<script src="form.js?v=1791959936"></script>
+<script src="site.js?v=1791959936"></script>
 </body>
 </html>
