@@ -186,6 +186,7 @@
 /* The wrap-up questions under the numbers, set apart like a section. */
 .probe-page .probe-wrapup { margin: 44px 0; padding-top: 32px; border-top: 1px solid var(--probe-separator); }
 .probe-wrapup h2 { margin-top: 0; }
+.probe-page .probe-wrapup #wrapup-done { margin: 0; }
 .probe-wrapup .probe { max-width: none; }
 /* The form tab, when it has a line to paste or a step to send them to. */
 .probe-page #relink-after, .probe-page #unsigned { margin-top: 24px; }

@@ -207,8 +207,14 @@
     const questions = config.wrapup || [];
     if (!questions.length) return;
     const who = new URLSearchParams(location.hash.slice(1));
-    const done = () => { $("wrapup-form").hidden = true; $("wrapup-done").hidden = false; };
+    // Once sent, the questions and their heading go, and one thank-you is left.
+    const done = () => {
+      $("wrapup-heading").hidden = true;
+      $("wrapup-form").hidden = true;
+      $("wrapup-done").hidden = false;
+    };
     $("wrapup").hidden = false;
+    $("thanks").hidden = true; // the thank-you after the questions takes its place
     if (report.wrapped) return done();
     const id = crypto.randomUUID(); // the same answers sent twice are only kept once
     ProbeForm.render($("wrapup-form"), {

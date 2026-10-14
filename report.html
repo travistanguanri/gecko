@@ -6,7 +6,7 @@
   <meta name="robots" content="noindex">
   <title>Pause</title>
   <link rel="icon" href="icon32.png">
-  <link rel="stylesheet" href="form.css?v=1791959936">
+  <link rel="stylesheet" href="form.css?v=1791960788">
 </head>
 <body class="probe-page probe-site" data-page="report">
 <!-- One person's numbers for one discussion, shown when they switch off.
@@ -24,18 +24,19 @@
   <p class="probe-lead" id="tools"></p>
 
   <!-- The wrap-up questions (Wrap-up Questions tab), sent straight to the sheet.
-       Once sent, a thank-you line takes their place. -->
+       Once sent, the thank-you line (report_wrapup_done) takes their place. -->
   <section class="probe-wrapup" id="wrapup" hidden>
-    <h2 data-copy="report_wrapup_heading"></h2>
+    <h2 id="wrapup-heading" data-copy="report_wrapup_heading"></h2>
     <div id="wrapup-form"></div>
     <p class="probe-lead" id="wrapup-done" data-copy="report_wrapup_done" hidden></p>
   </section>
 
-  <p class="probe-note" data-copy="report_thanks"></p>
+  <!-- Only when there are no wrap-up questions to ask -->
+  <p class="probe-note" id="thanks" data-copy="report_thanks"></p>
   <p class="probe-note"><a href="./" data-copy="report_link"></a></p>
 </main>
-<script src="config.js?v=1791959936"></script>
-<script src="form.js?v=1791959936"></script>
-<script src="site.js?v=1791959936"></script>
+<script src="config.js?v=1791960788"></script>
+<script src="form.js?v=1791960788"></script>
+<script src="site.js?v=1791960788"></script>
 </body>
 </html>
