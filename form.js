@@ -8,12 +8,16 @@
     return node;
   }
 
-  const isOther = function (label) { return /^others?$/i.test(label || ""); };
+  // An option called "Others", or any option ending in "...", is a box they
+  // type their own answer into, such as "Your definition...".
+  const isOther = function (label) { return /^others?$/i.test(label || "") || /(\.\.\.|…)$/.test(label || ""); };
+  const bare = function (label) { return String(label).replace(/\s*(\.\.\.|…)$/, ""); };
 
   // Every field returns { node, value() }. value() is "" until it is answered.
 
-  // Options as buttons. An option called "Others" is a box in the same row,
-  // with "Others" as its grey hint: they click in and type their own answer.
+  // Options as buttons. A typable option ("Others", or one ending in "...") is
+  // a box in the same row, with its words as the grey hint: they click in and
+  // type their own answer.
   function choiceField(q, changed) {
     const values = q.values || q.options;
     let picked = q.preset ? values.indexOf(q.preset) : -1;
@@ -45,7 +49,7 @@
         if (picked < 0) return "";
         if (!isOther(q.options[picked])) return String(values[picked]);
         const typed = other.value.trim();
-        return typed ? q.options[picked] + ": " + typed : "";
+        return typed ? bare(q.options[picked]) + ": " + typed : "";
       },
     };
   }
@@ -69,17 +73,20 @@
   }
 
   self.ProbeForm = {
-    // form = { title, questions: [{ id, question, type, options, values, preset }],
-    //          submitLabel, sending, error, out }  (wording, except out)
-    // Every question must be answered. onSubmit(answers) returns a promise;
-    // if it rejects, the participant can press the button again.
+    // form = { title, questions: [{ id, question, type, options, values, preset, required }],
+    //          submitLabel, sending, error, optional, out }  (wording, except out)
+    // Every question must be answered, except one with required: false, which
+    // carries the word in form.optional beside it. onSubmit(answers) returns a
+    // promise; if it rejects, the participant can press the button again.
     // out = { label, send } adds a quieter second button that needs no
     // answers: a way to say the form does not apply. send() returns a promise.
     render: function (root, form, onSubmit) {
       const button = el("button", { type: "button", className: "probe-submit", textContent: form.submitLabel || "Send" });
       const note = el("p", { className: "probe-note" });
       let fields = [];
-      const changed = function () { button.disabled = fields.some(function (f) { return !f.value(); }); };
+      const changed = function () {
+        button.disabled = fields.some(function (f, i) { return form.questions[i].required !== false && !f.value(); });
+      };
 
       root.classList.add("probe");
       root.replaceChildren();
@@ -87,9 +94,11 @@
       fields = form.questions.map(function (q) {
         const make = q.type === "choice" ? choiceField : q.type === "scale" ? scaleField : textField;
         const f = make(q, changed);
-        root.append(el("div", { className: "probe-question" }, [
-          el("p", { className: "probe-label", textContent: q.question }), f.node,
-        ]));
+        const label = el("p", { className: "probe-label", textContent: q.question });
+        if (q.required === false && form.optional) {
+          label.append(" ", el("span", { className: "probe-optional", textContent: form.optional }));
+        }
+        root.append(el("div", { className: "probe-question" }, [label, f.node]));
         return f;
       });
       const out = form.out && form.out.label

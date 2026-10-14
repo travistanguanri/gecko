@@ -176,6 +176,10 @@
 }
 .probe-page .probe-lead + .probe-lead { margin-top: -8px; }
 .probe-page .probe-lead + .probe-note { margin-top: 44px; }
+/* The wrap-up questions under the numbers, set apart like a section. */
+.probe-page .probe-wrapup { margin: 44px 0; padding-top: 32px; border-top: 1px solid var(--probe-separator); }
+.probe-wrapup h2 { margin-top: 0; }
+.probe-wrapup .probe { max-width: none; }
 /* The form tab, when it has a line to paste or a step to send them to. */
 .probe-page #relink-after, .probe-page #unsigned { margin-top: 24px; }
 
@@ -199,6 +203,8 @@
 }
 .probe-question { margin-bottom: 24px; }
 .probe-label { margin: 0 0 10px; font-size: 17px; line-height: 1.29; font-weight: 600; }
+/* "Optional", beside a question that can be left blank. */
+.probe-optional { font-weight: 400; color: var(--probe-secondary); }
 
 .probe-options { display: flex; flex-wrap: wrap; gap: 8px; }
 .probe-option {

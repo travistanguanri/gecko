@@ -82,6 +82,7 @@
     $("tools").textContent = ProbeForm.fill(copy.report_tools, { tools });
     $("tools").hidden = !report.tools.length;
     countUp($("moments"), report.moments);
+    wrapUp();
   }
   if (page === "home") {
     await asked;
@@ -196,6 +197,31 @@
     $("apps-skip").addEventListener("click", () => finishApps("skipped"));
 
     draw();
+  }
+
+  // ---- Report: the wrap-up questions ----------------------------------------
+
+  // Asked once per person per discussion, under their numbers. The answers go
+  // straight to the sheet, which checks the two codes from the address.
+  function wrapUp() {
+    const questions = config.wrapup || [];
+    if (!questions.length) return;
+    const who = new URLSearchParams(location.hash.slice(1));
+    const done = () => { $("wrapup-form").hidden = true; $("wrapup-done").hidden = false; };
+    $("wrapup").hidden = false;
+    if (report.wrapped) return done();
+    const id = crypto.randomUUID(); // the same answers sent twice are only kept once
+    ProbeForm.render($("wrapup-form"), {
+      submitLabel: copy.report_wrapup_send, sending: copy.form_sending, error: copy.form_error,
+      optional: copy.form_optional, questions,
+    }, async (answers) => {
+      const res = await (await fetch(self.PROBE_ENDPOINT, {
+        method: "POST",
+        body: JSON.stringify({ action: "wrapup", code: who.get("me"), room: who.get("room"), id, answers }),
+      })).json();
+      if (!res.ok) throw new Error(res.error || "not sent");
+      done();
+    });
   }
 
   // The big number counts up to its value, quickly at first and then settling.
