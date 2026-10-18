@@ -178,7 +178,9 @@
     const options = (text) => String(text || "").split("|").map((o) => o.trim()).filter(String);
     ProbeForm.render($("form"), {
       submitLabel: copy.signup_button, sending: copy.form_sending, error: copy.form_error,
-      questions: [
+      optional: copy.form_optional,
+      // From the Sign-up Questions tab; a sheet without it keeps the questions in the Copy tab.
+      questions: (config.signup && config.signup.length) ? config.signup : [
         { id: "name", question: copy.signup_name, type: "text" },
         { id: "year", question: copy.signup_year, type: "choice", options: options(copy.signup_year_options) },
         { id: "ai", question: copy.signup_ai, type: "choice", options: options(copy.signup_ai_options) },
