@@ -1,5 +1,5 @@
 #!/bin/bash
-# Snapshot app helper (Mac).
+# Gecko app helper (Mac).
 # Every 2 seconds it looks at which app is in front. While that is Claude,
 # ChatGPT or VS Code, and they are typing in it, it tells the sheet so (at
 # most once a minute per app) and opens the form tab when the sheet says a
@@ -10,8 +10,8 @@
 # other app's name ever leaves the laptop.
 
 ENDPOINT="https://script.google.com/macros/s/AKfycbzzvFWZZp-xoufGymrCWWDuZzNkuG7kjfGOglel1QkP1NMFvMZPq_Ut0YVq76HqccK0/exec"
-SITE="https://travistanguanri.github.io/snapshot"
-CODE="$(cat "$HOME/.snapshot/code.txt")"
+SITE="https://travistanguanri.github.io/gecko"
+CODE="$(cat "$HOME/.gecko/code.txt")"
 
 # The app in front, as the name written to the sheet. Empty for any other app.
 tool_in_front() {
@@ -76,7 +76,7 @@ while true; do
     --data-urlencode "source=app-mac" --data-urlencode "t=$now")"
   if [ "$reply" = "yes" ]; then
     # After the #: which sign-up this helper is linked to. That part of an
-    # address stays in the browser; Snapshot compares it with its own.
+    # address stays in the browser; Gecko compares it with its own.
     url="$SITE/form.html?tool=${tool// /%20}&source=app-mac#helper=$CODE"
     open -a "Google Chrome" "$url" 2>/dev/null || open "$url"
   fi

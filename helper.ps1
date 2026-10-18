@@ -1,4 +1,4 @@
-# Snapshot app helper (Windows).
+# Gecko app helper (Windows).
 # Every 2 seconds it looks at which app is in front. While that is Claude,
 # ChatGPT or VS Code, and the laptop is being used, it tells the sheet so (at
 # most once a minute per app) and opens the form tab when the sheet says a
@@ -8,8 +8,8 @@
 # It never looks inside any app, and no other app's name ever leaves the laptop.
 
 $endpoint = "https://script.google.com/macros/s/AKfycbzzvFWZZp-xoufGymrCWWDuZzNkuG7kjfGOglel1QkP1NMFvMZPq_Ut0YVq76HqccK0/exec"
-$site = "https://travistanguanri.github.io/snapshot"
-$code = (Get-Content (Join-Path $env:LOCALAPPDATA "Snapshot\code.txt") -Raw).Trim()
+$site = "https://travistanguanri.github.io/gecko"
+$code = (Get-Content (Join-Path $env:LOCALAPPDATA "Gecko\code.txt") -Raw).Trim()
 # Process name (lower case) -> name written to the sheet
 $tools = @{ "claude" = "Claude"; "chatgpt" = "ChatGPT"; "code" = "VS Code" }
 
@@ -121,7 +121,7 @@ while ($true) {
 
   if ($reply -eq "yes") {
     # After the #: which sign-up this helper is linked to. That part of an
-    # address stays in the browser; Snapshot compares it with its own.
+    # address stays in the browser; Gecko compares it with its own.
     $page = "${site}/form.html?tool=$([uri]::EscapeDataString($tool))&source=app-win#helper=${code}"
     try { Start-Process "chrome.exe" -ArgumentList "`"$page`"" -ErrorAction Stop }
     catch { Start-Process $page }

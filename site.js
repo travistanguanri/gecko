@@ -5,7 +5,7 @@
   const $ = (id) => document.getElementById(id);
   const page = document.body.dataset.page;
 
-  // The form tab is drawn by the Snapshot extension, which marks the page when it
+  // The form tab is drawn by the Gecko extension, which marks the page when it
   // is there. Without it, show the page's own note instead.
   if (page === "form") {
     setTimeout(() => {
@@ -16,7 +16,7 @@
 
   // ---- Talking to the extension (home page) ------------------------------
 
-  // A web page cannot see an extension. Snapshot's own script on this page
+  // A web page cannot see an extension. Gecko's own script on this page
   // (content.js) answers { pause: "ask" } messages with { pause: "tell" } ones.
   const ask = (msg) => window.postMessage(Object.assign({ pause: "ask" }, msg), location.origin);
   const hearing = [];
@@ -38,7 +38,7 @@
     });
   }
   // me: who is signed up in this Chrome, { name, code, apps }. It stays null
-  // when Snapshot is not here, or has been reloaded since this page was opened.
+  // when Gecko is not here, or has been reloaded since this page was opened.
   let me = null;
   let meChanged = () => {};
   hearing.push((msg) => {
@@ -114,7 +114,7 @@
     let showing = reached();
     let welcome = false; // they signed up a moment ago, on this page
     // The browser remembers which sign-up the app helper was last set up for,
-    // and that outlives the extension. A different code now means Snapshot was
+    // and that outlives the extension. A different code now means Gecko was
     // removed and added again, and the helper is still linked to the old one.
     const LINKED = "pause-helper-code";
     const linked = () => { try { return localStorage.getItem(LINKED) || ""; } catch (e) { return ""; } };
