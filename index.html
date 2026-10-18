@@ -4,24 +4,32 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex">
-  <title>Pause</title>
+  <title>Snapshot</title>
   <link rel="icon" href="icon32.png">
-  <link rel="stylesheet" href="form.css?v=1792313095">
+  <link rel="stylesheet" href="form.css?v=1792314829">
 </head>
 <body class="probe-page probe-site" data-page="home">
 <!-- The one page for getting set up: four tabs, opened at the first one this
-     person has not finished. The Pause extension tells the page whether it is
+     person has not finished. The Snapshot extension tells the page whether it is
      in this Chrome and who has signed up (see content.js).
      All wording comes from the Copy tab of the sheet. data-copy names the row
      to show; data-list shows every row that starts with that name as a list. -->
 <p id="offline" hidden>Couldn't load this page. Check your internet and reload.</p>
 <main id="page" hidden>
-  <!-- The same mark as the toolbar icon: two rounded bars on a circle. -->
+  <!-- The same mark as the toolbar icon (dev/make_icons.py): an instant photo
+       print with a small landscape in it, tilted, on a circle. -->
   <h1 class="probe-title probe-brand">
     <svg viewBox="0 0 100 100" width="36" height="36" aria-hidden="true">
       <circle cx="50" cy="50" r="50" fill="currentColor"/>
-      <rect x="26.75" y="26" width="17" height="48" rx="8.5" fill="var(--probe-bg)"/>
-      <rect x="56.25" y="26" width="17" height="48" rx="8.5" fill="var(--probe-bg)"/>
+      <g transform="rotate(-8 50 50)">
+        <rect x="29" y="23" width="42" height="54" rx="3.5" fill="var(--probe-bg)"/>
+        <rect x="33.5" y="27.5" width="33" height="34.5" rx="1.5" fill="currentColor"/>
+        <g fill="var(--probe-bg)">
+          <polygon points="33.5,62 46,47 58,62"/>
+          <polygon points="50,62 58,53 66.5,62"/>
+          <circle cx="58.5" cy="36.5" r="3.5"/>
+        </g>
+      </g>
     </svg>
     <span data-copy="site_heading"></span>
   </h1>
@@ -34,7 +42,7 @@
     <p data-copy="site_promise"></p>
     <h2 data-copy="site_extension_heading"></h2>
     <ol data-list="site_extension_"></ol>
-    <p><a class="probe-submit" href="pause-extension.zip" download data-copy="site_download"></a></p>
+    <p><a class="probe-submit" href="snapshot-extension.zip" download data-copy="site_download"></a></p>
   </section>
 
   <!-- 2. Sign up: what they are agreeing to, then the form -->
@@ -89,13 +97,13 @@
     <p data-copy="uninstall_extension"></p>
     <p data-copy="uninstall_helper"></p>
     <p class="probe-note" data-copy="helper_mac"></p>
-    <code>bash ~/.pause/uninstall.sh</code>
+    <code>bash ~/.snapshot/uninstall.sh</code>
     <p class="probe-note" data-copy="helper_windows"></p>
-    <code>powershell -ExecutionPolicy Bypass -File "$env:LOCALAPPDATA\Pause\uninstall.ps1"</code>
+    <code>powershell -ExecutionPolicy Bypass -File "$env:LOCALAPPDATA\Snapshot\uninstall.ps1"</code>
   </details>
 </main>
-<script src="config.js?v=1792313095"></script>
-<script src="form.js?v=1792313095"></script>
-<script src="site.js?v=1792313095"></script>
+<script src="config.js?v=1792314829"></script>
+<script src="form.js?v=1792314829"></script>
+<script src="site.js?v=1792314829"></script>
 </body>
 </html>

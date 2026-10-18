@@ -1,13 +1,15 @@
-# Pause app helper (Windows).
+# Snapshot app helper (Windows).
 # Every 2 seconds it looks at which app is in front. While that is Claude,
 # ChatGPT or VS Code, and the laptop is being used, it tells the sheet so (at
 # most once a minute per app) and opens the form tab when the sheet says a
-# form is due. Outside a discussion the sheet records nothing.
+# form is due. Separately, each time one of those apps comes to the front, it
+# tells the sheet how long it stayed there. Outside a discussion the sheet
+# records nothing.
 # It never looks inside any app, and no other app's name ever leaves the laptop.
 
 $endpoint = "https://script.google.com/macros/s/AKfycbzzvFWZZp-xoufGymrCWWDuZzNkuG7kjfGOglel1QkP1NMFvMZPq_Ut0YVq76HqccK0/exec"
-$site = "https://travistanguanri.github.io/pause"
-$code = (Get-Content (Join-Path $env:LOCALAPPDATA "Pause\code.txt") -Raw).Trim()
+$site = "https://travistanguanri.github.io/snapshot"
+$code = (Get-Content (Join-Path $env:LOCALAPPDATA "Snapshot\code.txt") -Raw).Trim()
 # Process name (lower case) -> name written to the sheet
 $tools = @{ "claude" = "Claude"; "chatgpt" = "ChatGPT"; "code" = "VS Code" }
 
@@ -68,8 +70,20 @@ public class PauseFocus {
 "@
 } catch {}
 
+# An AI app was in front from $start to $end (seconds). Sent without waiting
+# for the reply, so the checks carry on; outside a discussion the sheet keeps nothing.
+function Send-Open($tool, $start, $end) {
+  try {
+    $url = "${endpoint}?action=open&code=${code}&tool=$([uri]::EscapeDataString($tool))&source=app-win&start=${start}&end=${end}"
+    (New-Object Net.WebClient).DownloadStringAsync([uri]$url)
+  } catch {}
+}
+
 $lastTool = ""
 $lastSent = 0
+$frontTool = ""   # the AI app in front, and when it was first seen there
+$frontSince = 0
+$lastTick = [DateTimeOffset]::UtcNow.ToUnixTimeSeconds()  # a long gap since then means the laptop slept
 
 while ($true) {
   Start-Sleep -Seconds 2
@@ -77,10 +91,24 @@ while ($true) {
   [void][PauseWindow]::GetWindowThreadProcessId([PauseWindow]::GetForegroundWindow(), [ref]$processId)
   $name = ""
   try { $name = (Get-Process -Id $processId -ErrorAction Stop).ProcessName.ToLower() } catch {}
-  if (-not $tools.ContainsKey($name)) { continue }
-  if ([PauseWindow]::IdleSeconds() -ge 30) { continue }  # in front, but nobody is using it
-  $tool = $tools[$name]
   $now = [DateTimeOffset]::UtcNow.ToUnixTimeSeconds()
+  $inFront = ""
+  if ($tools.ContainsKey($name)) { $inFront = $tools[$name] }
+  # Asleep since the last check: the app stopped being looked at then.
+  if ($frontTool -and ($now - $lastTick) -gt 30) {
+    Send-Open $frontTool $frontSince $lastTick
+    $frontTool = ""
+  }
+  $lastTick = $now
+  if ($inFront -ne $frontTool) {
+    if ($frontTool) { Send-Open $frontTool $frontSince $now }
+    $frontTool = $inFront
+    $frontSince = $now
+  }
+
+  if (-not $inFront) { continue }
+  if ([PauseWindow]::IdleSeconds() -ge 30) { continue }  # in front, but nobody is using it
+  $tool = $inFront
   if ($tool -eq $lastTool -and ($now - $lastSent) -lt 60) { continue }
   $lastTool = $tool
   $lastSent = $now
@@ -93,7 +121,7 @@ while ($true) {
 
   if ($reply -eq "yes") {
     # After the #: which sign-up this helper is linked to. That part of an
-    # address stays in the browser; Pause compares it with its own.
+    # address stays in the browser; Snapshot compares it with its own.
     $page = "${site}/form.html?tool=$([uri]::EscapeDataString($tool))&source=app-win#helper=${code}"
     try { Start-Process "chrome.exe" -ArgumentList "`"$page`"" -ErrorAction Stop }
     catch { Start-Process $page }

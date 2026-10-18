@@ -5,7 +5,7 @@
   const $ = (id) => document.getElementById(id);
   const page = document.body.dataset.page;
 
-  // The form tab is drawn by the Pause extension, which marks the page when it
+  // The form tab is drawn by the Snapshot extension, which marks the page when it
   // is there. Without it, show the page's own note instead.
   if (page === "form") {
     setTimeout(() => {
@@ -16,7 +16,7 @@
 
   // ---- Talking to the extension (home page) ------------------------------
 
-  // A web page cannot see an extension. Pause's own script on this page
+  // A web page cannot see an extension. Snapshot's own script on this page
   // (content.js) answers { pause: "ask" } messages with { pause: "tell" } ones.
   const ask = (msg) => window.postMessage(Object.assign({ pause: "ask" }, msg), location.origin);
   const hearing = [];
@@ -38,7 +38,7 @@
     });
   }
   // me: who is signed up in this Chrome, { name, code, apps }. It stays null
-  // when Pause is not here, or has been reloaded since this page was opened.
+  // when Snapshot is not here, or has been reloaded since this page was opened.
   let me = null;
   let meChanged = () => {};
   hearing.push((msg) => {
@@ -76,12 +76,22 @@
 
   if (page === "report") {
     ProbeForm.fillInto($("heading"), copy.report_heading, { name: report.name });
-    $("moments-unit").textContent = report.moments === 1 ? copy.report_time : copy.report_times;
-    $("length").textContent = ProbeForm.fill(copy.report_length, { minutes: report.minutes });
+    if (report.opens) {
+      // How long AI was open on their screen leads; how often it was opened follows.
+      $("share-block").hidden = false;
+      $("share-of").textContent = ProbeForm.fill(copy.report_share_of, { minutes: report.minutes });
+      ProbeForm.fillInto($("opens"), report.opens === 1 ? copy.report_open : copy.report_opens, { opens: report.opens });
+      countUp($("percent"), report.percent, "%");
+    } else {
+      // Nothing was opened, or the discussion is from before opens were recorded.
+      $("stretch-block").hidden = false;
+      $("moments-unit").textContent = report.moments === 1 ? copy.report_time : copy.report_times;
+      $("length").textContent = ProbeForm.fill(copy.report_length, { minutes: report.minutes });
+      countUp($("moments"), report.moments);
+    }
     const tools = new Intl.ListFormat("en-GB", { type: "conjunction" }).format(report.tools);
     $("tools").textContent = ProbeForm.fill(copy.report_tools, { tools });
     $("tools").hidden = !report.tools.length;
-    countUp($("moments"), report.moments);
     wrapUp();
   }
   if (page === "home") {
@@ -104,7 +114,7 @@
     let showing = reached();
     let welcome = false; // they signed up a moment ago, on this page
     // The browser remembers which sign-up the app helper was last set up for,
-    // and that outlives the extension. A different code now means Pause was
+    // and that outlives the extension. A different code now means Snapshot was
     // removed and added again, and the helper is still linked to the old one.
     const LINKED = "pause-helper-code";
     const linked = () => { try { return localStorage.getItem(LINKED) || ""; } catch (e) { return ""; } };
@@ -231,13 +241,13 @@
   }
 
   // The big number counts up to its value, quickly at first and then settling.
-  function countUp(node, value) {
+  function countUp(node, value, after) {
     const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
     const start = performance.now();
     const length = Math.min(900, 250 + value * 60);
     const step = (now) => {
       const t = still ? 1 : Math.min(1, (now - start) / length);
-      node.textContent = Math.round(value * (1 - Math.pow(1 - t, 3)));
+      node.textContent = Math.round(value * (1 - Math.pow(1 - t, 3))) + (after || "");
       if (t < 1) requestAnimationFrame(step);
     };
     step(start);

@@ -194,7 +194,7 @@
     helperLines: function (site, code) {
       return {
         mac: "curl -fsSL " + site + "/install.sh | bash -s -- " + code,
-        windows: "$env:PAUSE_CODE='" + code + "'; [Net.ServicePointManager]::SecurityProtocol='Tls12'; "
+        windows: "$env:SNAPSHOT_CODE='" + code + "'; [Net.ServicePointManager]::SecurityProtocol='Tls12'; "
           + "iex (New-Object Net.WebClient).DownloadString('" + site + "/install.ps1')",
       };
     },

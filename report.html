@@ -4,9 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex">
-  <title>Pause</title>
+  <title>Snapshot</title>
   <link rel="icon" href="icon32.png">
-  <link rel="stylesheet" href="form.css?v=1792313095">
+  <link rel="stylesheet" href="form.css?v=1792314829">
 </head>
 <body class="probe-page probe-site" data-page="report">
 <!-- One person's numbers for one discussion, shown when they switch off.
@@ -14,12 +14,25 @@
 <p id="offline" hidden>Couldn't load your report. Check your internet and reload this page.</p>
 <main id="page" hidden>
   <h1 class="probe-title probe-greeting" id="heading"></h1>
-  <!-- Read as one sentence: "You reached for AI / 2 times across 24 min of
-       discussion / with Claude". The two lines around the number share a style. -->
-  <p class="probe-figure-label" data-copy="report_reached"></p>
-  <div class="probe-tally">
-    <p class="probe-figure"><span id="moments"></span> <span id="moments-unit"></span></p>
-    <p class="probe-figure-label" id="length"></p>
+  <!-- How much of the discussion AI was open on their screen carries the page:
+       "AI was open on your screen for / 34% of your 24 min discussion", then,
+       one step down, "You opened AI 12 times", then "With Claude". -->
+  <div id="share-block" hidden>
+    <p class="probe-figure-label" data-copy="report_share_label"></p>
+    <div class="probe-tally">
+      <p class="probe-figure" id="percent"></p>
+      <p class="probe-figure-label" id="share-of"></p>
+    </div>
+    <p class="probe-lead probe-count" id="opens"></p>
+  </div>
+  <!-- A discussion from before opens were recorded: its stretches of use instead,
+       "You reached for AI / 2 separate times across 24 min of discussion". -->
+  <div id="stretch-block" hidden>
+    <p class="probe-figure-label" data-copy="report_reached"></p>
+    <div class="probe-tally">
+      <p class="probe-figure"><span id="moments"></span> <span id="moments-unit"></span></p>
+      <p class="probe-figure-label" id="length"></p>
+    </div>
   </div>
   <p class="probe-lead" id="tools"></p>
 
@@ -35,8 +48,8 @@
   <p class="probe-note" id="thanks" data-copy="report_thanks"></p>
   <p class="probe-note"><a href="./" data-copy="report_link"></a></p>
 </main>
-<script src="config.js?v=1792313095"></script>
-<script src="form.js?v=1792313095"></script>
-<script src="site.js?v=1792313095"></script>
+<script src="config.js?v=1792314829"></script>
+<script src="form.js?v=1792314829"></script>
+<script src="site.js?v=1792314829"></script>
 </body>
 </html>

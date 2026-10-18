@@ -1,4 +1,4 @@
-/* One stylesheet for everything Pause shows: the floating form window, the
+/* One stylesheet for everything Snapshot shows: the floating form window, the
    popup, and the website (home with its four tabs, form tab, report).
 
    Typography follows Apple's text styles, one role per job:
@@ -113,7 +113,7 @@
 .probe-site main { width: 100%; color: var(--probe-secondary); }
 .probe-site h1, .probe-site h2, .probe-site .probe-figure, .probe-site .probe-figure-label { color: var(--probe-label); }
 .probe-site .probe-greeting:has(strong) { color: var(--probe-secondary); } /* a greeting keeps its grey lead-in */
-/* The website's heading: the Pause mark, as tall as the line of type, then the name. */
+/* The website's heading: the Snapshot mark, as tall as the line of type, then the name. */
 .probe-brand { display: flex; align-items: center; gap: 10px; }
 .probe-brand svg { flex: none; width: 36px; height: 36px; }
 /* A line that introduces a line to paste sits close above it. */
@@ -181,6 +181,9 @@
   font-variant-numeric: tabular-nums; /* the count-up must not jitter */
 }
 .probe-page .probe-tally .probe-figure-label { margin: 0; }
+/* "You opened AI 12 times": one step down from the percentage, a reading line
+   with the count picked out. */
+.probe-page .probe-count strong { color: var(--probe-label); font-weight: 600; }
 .probe-page .probe-lead + .probe-lead { margin-top: -8px; }
 .probe-page .probe-lead + .probe-note { margin-top: 44px; }
 /* The wrap-up questions under the numbers, set apart like a section. */
