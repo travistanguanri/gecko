@@ -190,6 +190,15 @@
       });
     },
 
+    // Writes text into a node, where a word or phrase between ** and ** is bold:
+    // "Start the recording **before** opening the room!".
+    rich: function (node, text) {
+      node.replaceChildren();
+      String(text == null ? "" : text).split(/\*\*(.+?)\*\*/).forEach(function (part, i) {
+        if (part) node.append(i % 2 ? el("strong", { textContent: part }) : part);
+      });
+    },
+
     // The app helper's install lines for one sign-up: { mac, windows }.
     helperLines: function (site, code) {
       return {

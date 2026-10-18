@@ -288,6 +288,7 @@
 .probe-popup .probe-step { margin: 20px 0 8px; font-size: 15px; line-height: 1.33; }
 .probe-popup .probe-step:first-child { margin-top: 0; }
 .probe-popup .probe-step:empty { display: none; }
+.probe-popup .probe-step strong { font-weight: 700; } /* a word the sheet marks with ** */
 .probe-join { display: flex; gap: 8px; }
 .probe-submit + .probe-join { margin-top: 8px; } /* no line between them */
 .probe-popup .probe-note { margin-top: 8px; }

@@ -76,14 +76,15 @@
 
   if (page === "report") {
     ProbeForm.fillInto($("heading"), copy.report_heading, { name: report.name });
-    if (report.opens) {
+    if (report.opens || report.tracked) {
       // How long AI was open on their screen leads; how often it was opened follows.
       $("share-block").hidden = false;
       $("share-of").textContent = ProbeForm.fill(copy.report_share_of, { minutes: report.minutes });
-      ProbeForm.fillInto($("opens"), report.opens === 1 ? copy.report_open : copy.report_opens, { opens: report.opens });
+      const opened = !report.opens ? copy.report_no_opens : report.opens === 1 ? copy.report_open : copy.report_opens;
+      ProbeForm.fillInto($("opens"), opened, { opens: report.opens });
       countUp($("percent"), report.percent, "%");
     } else {
-      // Nothing was opened, or the discussion is from before opens were recorded.
+      // A discussion from before opens were recorded.
       $("stretch-block").hidden = false;
       $("moments-unit").textContent = report.moments === 1 ? copy.report_time : copy.report_times;
       $("length").textContent = ProbeForm.fill(copy.report_length, { minutes: report.minutes });
