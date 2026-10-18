@@ -165,22 +165,20 @@
 .probe-remove summary:hover { color: var(--probe-label); }
 .probe-remove[open] summary { margin-bottom: 12px; }
 
-/* The report reads as one sentence: "You reached for AI", then "2 times" with
-   "across 24 min of discussion" on its baseline, then "with Claude". The
-   number carries the page in a large regular weight; the two lines around it
-   share one style (Travis's layout, 14 Oct). Wider than the other pages, so
-   the number and the line beside it fit side by side. */
-.probe-site[data-page="report"] main { max-width: 720px; }
+/* The report reads top to bottom: "You reached for AI", then "2 times" as
+   the big number, then "across 24 min of discussion" under it in the same
+   style as the line above, then "with Claude" (Travis's layout, 14 and 18 Oct).
+   The number carries the page in a large regular weight. */
 .probe-page .probe-figure-label {
   margin: 28px 0 0; font-size: 22px; line-height: 1.27; font-weight: 700; letter-spacing: -0.012em;
   text-wrap: balance;
 }
-.probe-tally { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 16px; margin: 4px 0 16px; }
+.probe-tally { margin: 4px 0 16px; }
 .probe-page .probe-figure {
   margin: 0; font-size: 88px; line-height: 1.05; font-weight: 400; letter-spacing: -0.03em;
   font-variant-numeric: tabular-nums; /* the count-up must not jitter */
 }
-.probe-page .probe-tally .probe-figure-label { margin: 0; }
+.probe-page .probe-tally .probe-figure-label { margin: 2px 0 0; }
 .probe-page .probe-lead + .probe-lead { margin-top: -8px; }
 .probe-page .probe-lead + .probe-note { margin-top: 44px; }
 /* The wrap-up questions under the numbers, set apart like a section. */
